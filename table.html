@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <title>Marksheet</title>
+</head>
+<style>
+    td, th{
+        border-left: 1px solid rgb(207, 207, 207);
+    }
+</style>
+<body>
+    <form action="">
+        <input type="text" id="name"> <br><br>
+        <input type="text" id="roll"> <br><br>
+        <button id="btn">Send</button>
+    </form>
+    <div class="container">
+        <div class="name d-flex">
+            <h2>Student Name: </h2>
+            <h2 id="nametxt">Ali</h2>
+        </div>
+        <div class="roll d-flex">
+            <h2>Student Roll No.: </h2>
+            <h2 id="rolltxt">Student2342341</h2>
+        </div>
+    </div>
+
+    <table class="table table-striped text-center my-5 w-75 mx-auto border">
+        <tr>
+            <th>Subjects</th>
+            <th colspan="5">Obtained Marks & Grade</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th>Obtained Marks</th>
+            <th>Practical Marks</th>
+            <th class="w-25">Total</th>
+            <th>Grade</th>
+            <th>Result</th>
+        </tr>
+        <tr>
+            <th>Mathematics</th>
+            <td>55</td>
+            <td>22</td>
+            <td>77</td>
+            <td>B1</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Physics</th>
+            <td>55</td>
+            <td>22</td>
+            <td>77</td>
+            <td>B1</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Chemistry</th>
+            <td>55</td>
+            <td>22</td>
+            <td>77</td>
+            <td>B1</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Biology</th>
+            <td>55</td>
+            <td>22</td>
+            <td>77</td>
+            <td>B1</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>Social Science</th>
+            <td>55</td>
+            <td>22</td>
+            <td>77</td>
+            <td>B1</td>
+            <td></td>
+        </tr>
+       
+    </table>
+   
+    <script>
+        document.getElementById('btn').addEventListener('click',()=>{
+
+            document.getElementById('nametxt').innerText = name;
+            document.getElementById('rolltxt').innerText = narollnome;
+        })
+            </script>
+</body>
+</html>
