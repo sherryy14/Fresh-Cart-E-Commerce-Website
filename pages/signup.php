@@ -2,7 +2,7 @@
 include "config.php";
 
 session_start();
-if($_SESSION['userEmail']){
+if(!$_SESSION['userEmail']){
   header("Location: signin.php");
 }
 
@@ -11,14 +11,21 @@ if(isset($_POST['register'])){
   $lname = $_POST['lname'];
   $email = $_POST['email'];
   $pass = $_POST['pass'];
-  
-  
-  $query = "INSERT INTO `register` (`fname`, `lname`, `email`, `password`) VALUES ('$fname', '$lname', '$email', '$pass')";
-  $result = mysqli_query($conn,$query);
 
-  header("Location: signin.php");
+  $enc_pass = password_hash($pass, PASSWORD_BCRYPT);
 
+  $query = "INSERT INTO `register` (`fname`, `lname`, `email`, `password`) VALUES ('$fname', '$lname', '$email', '$enc_pass')";
+  $result = mysqli_query($conn, $query);
+
+  if($result){
+    header("Location: signin.php");
+    exit();
+  } else {
+    echo "Please input your data correctly";
+  }
 }
+
+
 
 ?>
 

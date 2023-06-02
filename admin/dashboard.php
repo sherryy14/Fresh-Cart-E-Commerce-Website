@@ -18,7 +18,7 @@
                                     </h1>
                                     <p>FreshCart is simple & clean design for developer and
                                         designer.</p>
-                                    <a href="#" class="btn btn-primary">
+                                    <a href="products.php" class="btn btn-primary">
                                         Create Product
                                     </a>
                                 </div>

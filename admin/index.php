@@ -1,19 +1,37 @@
 <?php
+include 'config.php';
 session_start();
 
 if (isset($_SESSION['user'])) {
 	header("Location: dashboard.php");
 }
 
+
+
 if (isset($_POST['btn'])) {
-	$name = $_POST['user'];
 
-	$pass = $_POST['pass'];
+	$uname = $_POST['user'];
 
-	$_SESSION['user'] = $name;
+	$password = $_POST['pass'];
 
 
-	if ($name == 'Sherry' && $pass == 'sherry') {
+	$query = "SELECT * FROM `admin` WHERE (`username` = '$uname') AND `password` = '$password'";
+
+    $result = mysqli_query($conn, $query);
+
+    $row = mysqli_fetch_assoc($result);
+    // print_r($row);
+
+    // $_SESSION['email'] = $row['email'];
+    
+	$users = mysqli_num_rows($result);
+	// echo $users;
+	if($users === 1 ){
+		$_SESSION['user'] = $uname;
+		
+		// echo "<script> setTimeout(()=>{
+		// 	window.location.href = 'dashboard.php'
+		// },1000) </script>";
 		header("Location: dashboard.php");
 	} else {
 		$faildLogin = "Incorrect Credential";
@@ -45,7 +63,7 @@ if (isset($_POST['btn'])) {
 				<form class="login" method="post">
 					<div class="login__field">
 						<i class="login__icon fas fa-user"></i>
-						<input type="text" name="user" class="login__input" value="<?php echo @$name; ?>" placeholder="User name / Email" autocomplete="off">
+						<input type="text" name="user" class="login__input" value="<?php echo @$uname; ?>" placeholder="User name / Email" autocomplete="off">
 					</div>
 					<div class="login__field">
 						<i class="login__icon fas fa-lock"></i>

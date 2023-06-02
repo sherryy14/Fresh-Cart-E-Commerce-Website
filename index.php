@@ -185,7 +185,7 @@ include "config.php";
 
       <div class="row g-4 row-cols-lg-5 row-cols-2 row-cols-md-3">
         <?php
-        // $product = "SELECT "
+        // products 
         $query = "SELECT * FROM category AS c INNER JOIN products AS p ON c.cat_id = p.p_id";
         $result = mysqli_query($conn, $query);
 

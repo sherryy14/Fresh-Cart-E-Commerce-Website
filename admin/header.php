@@ -176,7 +176,7 @@ if(!isset($_SESSION['user'])){
 
 
                     <div class="lh-1 px-5 py-4 border-bottom">
-                        <h5 class="mb-1 h6"><?php echo $_SESSION['user']; ?> Admin</h5>
+                        <h5 class="mb-1 h6"><?php echo $_SESSION['user']; ?></h5>
                         <small>sherry@gmail.com</small>
                     </div>
 
