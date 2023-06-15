@@ -295,12 +295,9 @@ session_start();
 
           if(mysqli_num_rows($result)>0){
             while($row = mysqli_fetch_array($result)){
-              
-           
+
           ?>
           <li><a class="dropdown-item" href="pages/shop-grid.html"><?php echo $row['cat_name'];?></a></li>
-        
-
           <?php 
            }
           }
@@ -490,7 +487,7 @@ session_start();
                   </a>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="pages/account-orders.html">Orders</a></li>
-                    <li><a class="dropdown-item" href="pages/account-settings.html">Settings</a></li>
+                    <li><a class="dropdown-item" href="pages/account-settings.php">Settings</a></li>
                     <li><a class="dropdown-item" href="pages/account-address.html">Address</a></li>
                     <li><a class="dropdown-item" href="pages/account-payment-method.html">Payment Method</a>
                     </li>

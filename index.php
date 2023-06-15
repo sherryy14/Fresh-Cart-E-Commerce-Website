@@ -187,7 +187,7 @@ include "config.php";
       <div class="row g-4 row-cols-lg-5 row-cols-2 row-cols-md-3">
         <?php
         // products 
-        $query = "SELECT * FROM category AS c INNER JOIN products AS p ON c.cat_id = p.p_id";
+        $query = "SELECT * FROM category AS c INNER JOIN products AS p ON c.cat_id = p.p_id WHERE stock ='In Stock'";
         $result = mysqli_query($conn, $query);
 
         if(mysqli_num_rows($result)>0){

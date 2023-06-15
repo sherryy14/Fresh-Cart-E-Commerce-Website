@@ -2,40 +2,40 @@
 include 'header.php';
 include 'config.php';
 
+if (isset($_GET['page'])) {
+  $page = $_GET['page'];
+} else {
+  $page = 1;
+}
 
-// if(isset($_POST['stockvalue'])){
-//   $stocks = $_POST['stockvalue'];
-  
-// $stockQuery = "SELECT * FROM `category` AS `c` INNER JOIN `products` AS `p` ON c.cat_id = p.p_id WHERE stock = 'In stock'";
-// $stockResult = mysqli_query($conn, $stockQuery);
-// print_r($stockResult);
+$num_per_page = 04;
+$start_from = ($page - 1) * $num_per_page;
 
-// }
 
-$prodQuery = "SELECT * FROM `category` AS `c` INNER JOIN `products` AS `p` ON c.cat_id = p.p_id";
-if(isset($_POST['stockbtn'])) {
-  if($_POST['stockvalue']=='1') { 
+
+$prodQuery = "SELECT * FROM `category` AS `c` INNER JOIN `products` AS `p` ON c.cat_id = p.p_id LIMIT $start_from,$num_per_page";
+if (isset($_POST['stockbtn'])) {
+  if ($_POST['stockvalue'] == '1') {
 
     $prodQuery = "SELECT * FROM `category` AS `c` INNER JOIN `products` AS `p` ON c.cat_id = p.p_id WHERE stock = 'In stock'";
     // $prodResult = mysqli_query($conn, $prodQuery);
-    
-  }
-  elseif($_POST['stockvalue']=='2') {   
-    
+
+  } elseif ($_POST['stockvalue'] == '2') {
+
     $prodQuery = "SELECT * FROM `category` AS `c` INNER JOIN `products` AS `p` ON c.cat_id = p.p_id WHERE stock = 'Out of stock'";
     // $prodResult = mysqli_query($conn, $prodQuery);
 
-  }
-  elseif($_POST['stockvalue']=='0'){
+  } elseif ($_POST['stockvalue'] == '0') {
 
     $prodQuery = "SELECT * FROM `category` AS `c` INNER JOIN `products` AS `p` ON c.cat_id = p.p_id";
     // $prodResult = mysqli_query($conn, $prodQuery);
-   
+
   }
 }
 
 
-$prodResult = mysqli_query($conn, $prodQuery) or die (mysqli_error($conn));
+$prodResult = mysqli_query($conn, $prodQuery) or die(mysqli_error($conn));
+
 
 ?>
 
@@ -79,19 +79,19 @@ $prodResult = mysqli_query($conn, $prodQuery) or die (mysqli_error($conn));
               </div>
               <!-- select option -->
               <div class="col-lg-2 col-md-4 col-12">
-                <form  method="post">
+                <form method="post">
 
                   <select class="form-select" name="stockvalue">
-                    
+
                     <option value="0" selected>All</option>
-                    
+
                     <option value="1">In Stock</option>
                     <option value="2">Out Of Stock</option>
-                    
+
                   </select>
 
                   <input type="submit" value="Filter" class='btn btn-primary' name='stockbtn'>
-                  
+
                 </form>
 
               </div>
@@ -126,13 +126,13 @@ $prodResult = mysqli_query($conn, $prodQuery) or die (mysqli_error($conn));
                   if (mysqli_num_rows($prodResult) > 0) {
                     while ($row = mysqli_fetch_array($prodResult)) {
 
-                      if($row['stock']== "In stock"){
+                      if ($row['stock'] == "In stock") {
                         $class = "badge bg-light-primary text-dark-primary";
-                      }else{
+                      } else {
                         $class = "badge bg-light-danger text-dark-danger";
                       }
                   ?>
-                  
+
                       <tr>
 
                         <td>
@@ -144,17 +144,17 @@ $prodResult = mysqli_query($conn, $prodQuery) or die (mysqli_error($conn));
                           </div>
                         </td>
                         <td>
-                          <a href="#!"> <img src="../assets/images/products/<?php echo $row['img1'];?>" alt="" class="icon-shape icon-md"></a>
+                          <a href="#!"> <img src="../assets/images/products/<?php echo $row['img1']; ?>" alt="" class="icon-shape icon-md"></a>
                         </td>
-                        <td><a href="#" class="text-reset"><?php echo $row['p_title'];?></a></td>
-                        <td><?php echo $row['cat_name'];?></td>
+                        <td><a href="#" class="text-reset"><?php echo $row['p_title']; ?></a></td>
+                        <td><?php echo $row['cat_name']; ?></td>
 
                         <td>
-                          <span class="<?php echo $class;?>"><?php echo $row['stock'];?></span>
+                          <span class="<?php echo $class; ?>"><?php echo $row['stock']; ?></span>
                         </td>
-                        <td>$<?php echo $row['p_price'];?></td>
-                        <td>$<?php echo $row['re_price'];?></td>
-                        
+                        <td>$<?php echo $row['p_price']; ?></td>
+                        <td>$<?php echo $row['re_price']; ?></td>
+
                         <td>
                           <div class="dropdown">
                             <a href="#" class="text-reset" data-bs-toggle="dropdown" aria-expanded="false">
@@ -178,15 +178,58 @@ $prodResult = mysqli_query($conn, $prodQuery) or die (mysqli_error($conn));
 
             </div>
           </div>
+
+          <?php 
+
+          // Pagination Query 
+          
+          $page_query = "SELECT * FROM `products`";
+                $page_result = mysqli_query($conn, $page_query);
+                $total_records = mysqli_num_rows($page_result);
+          
+                
+                $total_pages = ceil($total_records / $num_per_page);
+          ?>
+
+
+
           <div class=" border-top d-md-flex justify-content-between align-items-center px-6 py-6">
-            <span>Showing 1 to 8 of 12 entries</span>
+            <span>Showing <?php echo $page ?> to <?php echo ($page+$num_per_page)-1 ?> of <?php echo $total_records;?> entries</span>
             <nav class="mt-2 mt-md-0">
               <ul class="pagination mb-0 ">
-                <li class="page-item disabled"><a class="page-link " href="#!">Previous</a></li>
-                <li class="page-item"><a class="page-link active" href="#!">1</a></li>
-                <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                <li class="page-item"><a class="page-link" href="#!">Next</a></li>
+                <?php
+                if($num_per_page > $total_pages+2){
+                  $disable =  "disabled";
+                }else{
+                  $disable =  "";
+
+                }
+              
+                if($page>1){
+                  echo "<li class='page-item '><a href='products.php?page=".($page-1)."' class='page-link'>Previous</a></li>";
+                }
+                for ($i = 1; $i <= $total_pages; $i++) {
+                  if($i == $page){
+                    $active ="active";
+                  }else{
+                    $active ="";
+                  }
+                
+                ?>
+              
+                <li class="page-item <?php echo $active;?>"><a class="page-link" href="products.php?page=<?php echo $i?>"><?php echo $i?></a></li>
+               
+
+                <?php 
+                }
+                 if($i>$page){
+                  echo "<li class='page-item $disable'><a href='products.php?page=".($page+1)."' class='page-link'>Next</a></li>";
+                }
+                
+              
+               
+            
+                ?>
               </ul>
             </nav>
           </div>

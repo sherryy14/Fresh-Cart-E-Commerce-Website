@@ -491,7 +491,7 @@ include "config.php";
                   </a>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="account-orders.html">Orders</a></li>
-                    <li><a class="dropdown-item" href="account-settings.html">Settings</a></li>
+                    <li><a class="dropdown-item" href="account-settings.php">Settings</a></li>
                     <li><a class="dropdown-item" href="account-address.html">Address</a></li>
                     <li><a class="dropdown-item" href="account-payment-method.html">Payment Method</a>
                     </li>

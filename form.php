@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             // Password is correct
             $_SESSION['username'] = $username;
             echo "Login successful!";
+            // header("Location: index.php");
         } else {
             // Password is incorrect
             echo "Incorrect username or password!";
@@ -50,6 +51,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 
 // Remember to close the database connection when you're done
 mysqli_close($conn);
+
+
+$pass = "sherry123";
+$encPass = password_hash($pass, PASSWORD_BCRYPT);
+echo "Original: $pass <br><br> Encrypted: $encPass <br>";
+
+
+if(password_verify($pass, $encPass)){
+    echo "Matched Blowfish";
+}else{
+    
+    echo "Not Matched Blowfish";
+};
+
+
+echo "<br><br>MD5: ". md5($pass, FALSE);
+$md = md5($pass);
+$mdEnc = "ca6fe5c757d9519060e7749802557435";
+if(md5($pass) == $mdEnc){
+    echo "<br>Matched SHA1";
+}else{
+    
+    echo "<br>Not Matched SAH1";
+};
+
+
+echo "<br><br>SHA1: ". sha1($pass, FALSE);
+$sha = sha1($pass);
+$shaEnc = "2abbb3e61c9e84095fdbc0c44a13ddf90d757f22";
+if(sha1($pass) == $shaEnc){
+    echo "<br>Matched MD";
+}else{
+    
+    echo "<br>Not Matched MD";
+};
 ?>
 
 <!-- HTML form for signup and login -->
@@ -75,4 +111,16 @@ mysqli_close($conn);
         <input type="submit" name="login" value="Login">
     </form>
 </body>
+<!-- <?php
+$name = "Nathan"; 
+?>
+
+<h1>Passing PHP variable to JavaScript</h1>
+<h2 id="result"></h2>
+<script>
+    const data = "<?php echo $name; ?>";
+    const result = document.getElementById("result");
+    result.innerText = data;
+</script> -->
+
 </html>

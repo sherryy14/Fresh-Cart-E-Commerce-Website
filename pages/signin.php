@@ -3,7 +3,7 @@ include "config.php";
 
 session_start();
 
-if(isset($_POST['signin'])) {
+if (isset($_POST['signin'])) {
   $email = $_POST['email'];
   $pass = $_POST['pass'];
 
@@ -16,16 +16,18 @@ if(isset($_POST['signin'])) {
     $row = mysqli_fetch_assoc($result);
     $storedPassword = $row['password'];
 
+
     if (password_verify($pass, $storedPassword)) {
       // Password is correct
       echo "Login successful!";
+      header("Location: ../index.php");
     } else {
       // Password is incorrect
       echo "Incorrect username or password!";
     }
   } else {
     // User not found
-    echo "Incorrect username or password!";
+    echo "User not found";
   }
 
   // Remember to close the database connection when you're done

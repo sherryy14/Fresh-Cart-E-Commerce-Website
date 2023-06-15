@@ -2,9 +2,9 @@
 include "config.php";
 
 session_start();
-if(!$_SESSION['userEmail']){
-  header("Location: signin.php");
-}
+// if($_SESSION['userEmail']){
+//   header("Location: index.php");
+// }
 
 if(isset($_POST['register'])){
   $fname = $_POST['fname'];

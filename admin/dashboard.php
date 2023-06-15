@@ -2,6 +2,7 @@
 include 'header.php';
 include 'config.php';
 
+// Graph Query 
 $query = "SELECT c.cat_name AS name, count(p.p_category) AS y FROM `category` AS c LEFT JOIN `products` AS p ON c.cat_id = p.p_category GROUP BY c.cat_id";
 $res = mysqli_query($conn, $query);
 
@@ -11,9 +12,30 @@ while ($data = mysqli_fetch_assoc($res)) {
 }
 $totalVisitors = 0;
 
-$nOofProd = "SELECT count(p_id) AS p_count,  count(cat_id) AS c_count FROM `products` AS p RIGHT JOIN `category` AS c ON c.cat_id = p.p_category";
-$noRes = mysqli_query($conn, $nOofProd);
+// Products , Categories, And Users Count 
+$nOofProdCat = "SELECT count(p_id) AS p_count,  count(cat_id) AS c_count FROM `products` AS p RIGHT JOIN `category` AS c ON c.cat_id = p.p_category";
+$noRes = mysqli_query($conn, $nOofProdCat);
 $noRow = mysqli_fetch_array($noRes);
+
+$nOofUsers = "SELECT count(user_id) AS users FROM `register`";
+$noUser = mysqli_query($conn, $nOofUsers);
+$users = mysqli_fetch_array($noUser);
+
+// Recently Added Products 
+$prodQuery = "SELECT * FROM `category` AS `c` INNER JOIN `products` AS `p` ON c.cat_id = p.p_id ORDER BY p_id DESC LIMIT 5";
+if(isset($_POST['stockbtn'])) {
+  if($_POST['stockvalue']=='1') { 
+    $prodQuery = "SELECT * FROM `category` AS `c` INNER JOIN `products` AS `p` ON c.cat_id = p.p_id ORDER BY p_id DESC LIMIT 5 WHERE stock = 'In stock'";  
+  }
+  elseif($_POST['stockvalue']=='2') {     
+    $prodQuery = "SELECT * FROM `category` AS `c` INNER JOIN `products` AS `p` ON c.cat_id = p.p_id ORDER BY p_id DESC LIMIT 5 WHERE stock = 'Out of stock'";
+  }
+  elseif($_POST['stockvalue']=='0'){
+    $prodQuery = "SELECT * FROM `category` AS `c` INNER JOIN `products` AS `p` ON c.cat_id = p.p_id ORDER BY p_id DESC LIMIT 5";
+  }
+}
+$prodResult = mysqli_query($conn, $prodQuery) or die (mysqli_error($conn));
+
 ?>
 
 
@@ -94,7 +116,7 @@ $noRow = mysqli_fetch_array($noRes);
                         <!-- heading -->
                         <div class="d-flex justify-content-between align-items-center mb-6">
                             <div>
-                                <h4 class="mb-0 fs-5">Customer</h4>
+                                <h4 class="mb-0 fs-5">Users</h4>
                             </div>
                             <div class="icon-shape icon-md bg-light-info text-dark-info rounded-circle">
                                 <i class="bi bi-people fs-5"></i>
@@ -102,8 +124,8 @@ $noRow = mysqli_fetch_array($noRes);
                         </div>
                         <!-- project number -->
                         <div class="lh-1">
-                            <h1 class=" mb-2 fw-bold fs-2">39,354</h1>
-                            <span><span class="text-dark me-1">30+</span>new in 2 days</span>
+                            <h1 class=" mb-2 fw-bold fs-2"><?php echo $users['users']?></h1>
+                            <span>No. Of Registered Users</span>
                         </div>
                     </div>
                 </div>
@@ -266,79 +288,82 @@ $noRow = mysqli_fetch_array($noRes);
                 <div class="card h-100 card-lg">
                     <!-- heading -->
                     <div class="p-6">
-                        <h3 class="mb-0 fs-5">Recent Order</h3>
+                        <h3 class="mb-0 fs-5">Recently Added Products</h3>
                     </div>
                     <div class="card-body p-0">
                         <!-- table -->
                         <div class="table-responsive">
-                            <table class="table table-centered table-borderless text-nowrap table-hover">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th scope="col">Order Number</th>
-                                        <th scope="col">Product Name</th>
-                                        <th scope="col">Order Date</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Status</th>
+                        <table class="table table-centered table-hover text-nowrap table-borderless mb-0 table-with-checkbox">
+                <thead class="bg-light">
+                  <tr>
+                    <th>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                        <label class="form-check-label" for="checkAll">
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
+                        </label>
+                      </div>
+                    </th>
+                    <th>Image</th>
+                    <th>Proudct Name</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Sales Price</th>
+                    <th>Regular Price</th>
+                 
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  if (mysqli_num_rows($prodResult) > 0) {
+                    while ($row = mysqli_fetch_array($prodResult)) {
 
-                                        <td>#FC0005</td>
-                                        <td>Haldiram's Sev Bhujia</td>
-                                        <td>28 March 2023</td>
-                                        <td>$18.00</td>
-                                        <td>
-                                            <span class="badge bg-light-primary text-dark-primary">Shipped</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
+                      if($row['stock']== "In stock"){
+                        $class = "badge bg-light-primary text-dark-primary";
+                      }else{
+                        $class = "badge bg-light-danger text-dark-danger";
+                      }
+                  ?>
+                  
+                      <tr>
 
-                                        <td>#FC0004</td>
-                                        <td>NutriChoice Digestive</td>
-                                        <td>24 March 2023</td>
-                                        <td>$24.00</td>
-                                        <td>
-                                            <span class="badge bg-light-warning text-dark-warning">Pending</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
+                        <td>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="productOne">
+                            <label class="form-check-label" for="productOne">
 
-                                        <td>#FC0003</td>
-                                        <td>Onion Flavour Potato</td>
-                                        <td>8 Feb 2023</td>
-                                        <td>$9.00</td>
-                                        <td>
-                                            <span class="badge bg-light-danger text-dark-danger">Cancel</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
+                            </label>
+                          </div>
+                        </td>
+                        <td>
+                          <a href="#!"> <img src="../assets/images/products/<?php echo $row['img1'];?>" alt="" class="icon-shape icon-md"></a>
+                        </td>
+                        <td><a href="#" class="text-reset"><?php echo $row['p_title'];?></a></td>
+                        <td><?php echo $row['cat_name'];?></td>
 
-                                        <td>#FC0002</td>
-                                        <td>Blueberry Greek Yogurt</td>
-                                        <td>20 Jan 2023</td>
-                                        <td>$12.00</td>
-                                        <td>
-                                            <span class="badge bg-light-warning text-dark-warning">Pending</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
+                        <td>
+                          <span class="<?php echo $class;?>"><?php echo $row['stock'];?></span>
+                        </td>
+                        <td>$<?php echo $row['p_price'];?></td>
+                        <td>$<?php echo $row['re_price'];?></td>
+                        
+                       
+                      </tr>
+                  <?php
 
-                                        <td>#FC0001</td>
-                                        <td>Slurrp Millet Chocolate</td>
-                                        <td>14 Jan 2023</td>
-                                        <td>$8.00</td>
-                                        <td>
-                                            <span class="badge bg-light-info text-dark-info">Processing</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                    }
+                  }
+                  ?>
+                </tbody>
+              </table>
             </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+        <div class="container w-25">
+        <a href="products.php" class='btn btn-primary '>View All</a>
         </div>
     </section>
 </main>
